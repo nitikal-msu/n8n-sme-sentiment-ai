@@ -1,118 +1,121 @@
 # 🚀 Automated SME Customer Sentiment Analysis
 
-> An AI-powered workflow automation solution for processing customer messages, generating responses, analyzing sentiment, and organizing customer feedback for SME businesses.
+> **An end-to-end automated AI workflow that helps SMEs analyze customer feedback in real time — from LINE messages to sentiment insights and business dashboards.**
 
 ---
 
 ## 📌 Project Overview
 
-**Automated SME Customer Sentiment Analysis** is an AI-powered workflow automation project designed to support Small and Medium-sized Enterprises (SMEs) in managing customer messages and feedback more efficiently.
+**Automated SME Customer Sentiment Analysis** is an end-to-end automated workflow designed to help **Small and Medium-sized Enterprises (SMEs)** analyze customer feedback in real time.
 
-The workflow is built with **n8n** and integrates **LINE Official Account**, **Google Sheets**, and **Google Gemini** to automate the customer-feedback processing flow.
+The project leverages **n8n** to connect **LINE Official Account messages** with **Generative AI / Large Language Models (LLMs)** to automatically classify customer sentiments and extract key insights — without requiring manual data entry.
 
-When a customer sends a message, the workflow receives the event through a webhook, retrieves relevant product information from Google Sheets, and uses Google Gemini to generate an appropriate response.
+### 🔄 End-to-End Workflow
 
-Depending on the workflow conditions, customer feedback can also be sent through a sentiment analysis process. The analysis result is stored in Google Sheets, and potentially negative feedback is routed to an alert process for further attention.
+**Customer Message → LINE OA → Webhook → n8n → GenAI / LLM → Sentiment Classification → Data Storage → Dashboard → Business Insights**
 
-This project demonstrates how **Generative AI, workflow automation, API integration, conditional logic, and structured data management** can be combined to support a practical customer-service process.
-
-<img width="1600" alt="Automated SME Customer Sentiment Analysis Workflow" src="https://github.com/user-attachments/assets/addb4df4-9232-4a2e-bf9f-1e290a7f7703" />
+<img width="1600" height="522" alt="Automated SME Customer Sentiment Analysis Workflow" src="https://github.com/user-attachments/assets/addb4df4-9232-4a2e-bf9f-1e290a7f7703" />
 
 ---
 
 ## 🎯 Project Objectives
 
-The project aims to:
-
-- Automate the processing of customer messages.
-- Assist in generating responses to customer inquiries.
-- Analyze customer feedback using AI-powered sentiment analysis.
-- Identify potentially negative customer feedback.
-- Store customer interactions and review results in a structured format.
-- Reduce repetitive manual work in customer-feedback processing.
-- Connect customer communication, AI processing, and business data within one workflow.
-- Provide a foundation for future customer-service analytics and dashboards.
-
----
-
-## 💡 Business Problem
-
-SMEs often use messaging platforms such as LINE to communicate with customers.
-
-As customer interactions increase, businesses may need to manually:
-
-1. Read incoming customer messages.
-2. Check product information.
-3. Understand customer intent.
-4. Prepare an appropriate response.
-5. Identify customer complaints or negative feedback.
-6. Record customer feedback for later analysis.
-
-Handling these activities manually can become repetitive and make it difficult to maintain structured customer-feedback data.
-
-### 💡 Proposed Solution
-
-This project uses **n8n as the central automation platform** to connect customer communication, product information, AI processing, sentiment analysis, data storage, and notification logic into a single workflow.
-
-The overall process is:
-
-```text
-Customer Message
-       ↓
-LINE Official Account
-       ↓
-Webhook
-       ↓
-Get Product Data
-       ↓
-Google Gemini
-Generate Response
-       ↓
-Check for Review
-       │
-       ├── No Review
-       │      ↓
-       │  Save Interaction
-       │
-       └── Review Required
-              ↓
-        Sentiment Analysis
-              ↓
-        Save Review Data
-              ↓
-       Check for Negative
-              ↓
-        Alert if Required
+- Automate the collection and analysis of customer feedback.
+- Reduce manual data entry and sentiment tagging.
+- Classify customer sentiment using **GenAI / LLM technology**.
+- Transform raw customer messages into structured business data.
+- Provide business owners with faster and more actionable insights.
+- Support real-time identification of negative customer feedback.
 
 ---
 
 ## 🛠️ Tech Stack & Tools
-* **Workflow Automation:** n8n (Node-based automation)
-* **AI & NLP:** GenAI / LLM APIs (for sentiment classification)
-* **Data Sources/Integrations:** LINE OA API, Webhooks
-* **Storage/Dashboarding:** Google Sheets / BI Tools
+
+| Category | Technology / Tool |
+|---|---|
+| ⚙️ Workflow Automation | **n8n** — Node-based workflow automation |
+| 🤖 AI & NLP | **GenAI / LLM APIs** — Sentiment classification & insight extraction |
+| 💬 Customer Data Source | **LINE Official Account (LINE OA)** |
+| 🔗 Integration | **Webhooks / LINE OA API** |
+| 📊 Data Storage | **Google Sheets** |
+| 📈 Dashboarding | **Looker Studio / BI Tools** |
+
+---
+
+## 🔄 How It Works
+
+### 1️⃣ Customer Feedback Collection
+Customers send messages through the **LINE Official Account**.
+
+### 2️⃣ Automated Data Trigger
+The incoming message is received through a **Webhook** and passed into the n8n workflow.
+
+### 3️⃣ AI Sentiment Analysis
+The workflow sends the customer feedback to a **GenAI / LLM API** for automatic sentiment classification and key insight extraction.
+
+### 4️⃣ Automated Data Processing
+The workflow processes and structures the AI output without requiring manual data entry or tagging.
+
+### 5️⃣ Data Storage
+The processed results are automatically stored in **Google Sheets** for further analysis and reporting.
+
+### 6️⃣ Business Dashboard
+The data is connected to **Looker Studio / BI Tools**, allowing business owners to monitor customer sentiment and identify important feedback.
+
+---
 
 ## 💡 Key Highlights & Business Impact
-* **Zero Manual Intervention:** Fully automated end-to-end pipeline that eliminates manual data extraction, tagging, and logging.
-* **Real-World Deployment:** Successfully deployed and tested with **6 active SME test users**.
-* **Actionable Insights:** Enables business owners to immediately identify negative feedback and respond in real-time.
 
-## 📂 Repository Contents
-* `workflow_export.json`: The raw n8n workflow file. (You can easily import this into your local n8n instance to see the pipeline structure).
-* *(Note: All API keys and sensitive credentials have been replaced with placeholders e.g., `YOUR_LINE_CHANNEL_ACCESS_TOKEN` for security purposes).*
+### ⚡ Zero Manual Intervention
 
-## ⚙️ How to Use
-1. Install [n8n](https://n8n.io/).
-2. Go to the workflows tab and click **Import from File**.
-3. Select the `.json` file from this repository.
-4. Re-configure the credentials (LINE API, LLM API) to test the workflow.
+A fully automated end-to-end pipeline that eliminates manual:
 
-## 📊 Live Dashboards & Previews
-## 🔗 Direct Project Links
-Click the badges below to directly view the live data outputs:
+- Data extraction
+- Sentiment tagging
+- Data logging
+- Initial feedback processing
+
+### 🧪 Real-World Deployment
+
+Successfully **deployed and tested with 6 active SME test users**, providing a practical testing environment beyond a purely theoretical workflow.
+
+### 📊 Actionable Insights
+
+The workflow transforms customer messages into structured sentiment data, enabling business owners to:
+
+- Identify negative feedback quickly.
+- Monitor overall customer sentiment.
+- Review customer feedback trends.
+- Respond to important issues in a more timely manner.
+
+### 🤖 AI-Powered Automation
+
+Combines **Workflow Automation + GenAI / LLM + Customer Data + Business Intelligence** into a single automated pipeline.
+
+---
+
+## 📊 Live Dashboards & Data Outputs
+
+Explore the live outputs generated by the project:
+
+### 📈 Looker Studio — Live Dashboard
 
 [![Looker Studio](https://img.shields.io/badge/Looker_Studio-Live_Dashboard-blue?style=for-the-badge&logo=googlecloud&logoColor=white)](https://datastudio.google.com/s/lmC0nS_JDuM)
 
+> Interactive dashboard for exploring customer sentiment analysis results and business insights.
+
+### 📋 Google Sheets — Database View
+
 [![Google Sheets](https://img.shields.io/badge/Google_Sheets-Database_View-green?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit?usp=sharing)
-              ↓
-      LINE Messaging API
+
+> Structured data output generated by the automated workflow.
+
+---
+
+## 📂 Repository Contents
+
+```text
+📦 Automated-SME-Customer-Sentiment-Analysis
+│
+├── 📄 workflow_export.json
+└── 📄 README.md
