@@ -84,6 +84,8 @@ Check for Review
               ↓
         Alert if Required
 
+---
+
 ## 🛠️ Tech Stack & Tools
 * **Workflow Automation:** n8n (Node-based automation)
 * **AI & NLP:** GenAI / LLM APIs (for sentiment classification)
