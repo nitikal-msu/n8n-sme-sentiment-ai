@@ -1,0 +1,550 @@
+{
+  "name": "LINE Product Chat with Review Sentiment Analysis and Alert System",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook",
+        "options": {}
+      },
+      "id": "04df2886-8813-4df9-958b-d54b8c132256",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1248,
+        320
+      ],
+      "webhookId": "150172c0-9223-41de-945a-f5cbef67ee67"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8",
+          "mode": "list",
+          "cachedResultName": "SME_AI_System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Products",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "754685ad-a454-4408-85d5-4c0a739296a8",
+      "name": "Get Product Data",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1024,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8c0fc0dd-6e9f-4e60-8166-ba6f0a2cd671",
+      "name": "Google Gemini Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Role: คุณคือ AI Sales Assistant ของร้านค้าเรา มีนิสัยสุภาพ เป็นกันเอง น่ารัก และใช้ Emoji เพื่อความสดใส 🛍️✨\n\nProduct Data (รายการสินค้าที่มี):\n{{ JSON.stringify($('Get Product Data').all()) }}\n\nInstructions:\n1. **การตอบคำถาม:** ให้ตอบโดยอ้างอิงข้อมูลจาก \"Product Data\" ด้านบนเท่านั้น ถ้าลูกค้าถามถึงสินค้าที่ไม่มีในรายการ ให้แจ้งอย่างสุภาพว่า \"ขออภัยค่ะ สินค้านั้นทางเรายังไม่มีจำหน่าย\"\n2. **การขาย:** ถ้าลูกค้าแสดงความสนใจสินค้า ให้เชียร์ขายและพยายามปิดการขาย (เช่น ถามว่าจะรับกี่ชิ้น หรือเสนอราคา)\n3. **สำคัญมาก (System Tag):** หากข้อความของลูกค้าเป็น \"การรีวิวสินค้า\", \"คำชม\" หรือ \"Feedback\" ให้คุณตอบกลับโดยขึ้นต้นประโยคด้วยคำว่า [REVIEW] แล้วตามด้วยข้อความรีวิวนั้น (เพื่อให้ระบบบันทึกข้อมูล)\n4. **น้ำเสียง:** ใช้ภาษาไทยที่ถูกต้อง สุภาพ (ครับ/ค่ะ) และเป็นกันเอง\n\nUser Question (คำถามลูกค้า): {{ $('Webhook').item.json.body.events[0].message.text }}",
+        "batching": {}
+      },
+      "id": "609a621a-0a4a-459b-940c-6923c5c46b0e",
+      "name": "Generate Response",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -592,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "[REVIEW]",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9876cbd1-3d63-4929-ba91-64b12862e723",
+      "name": "Check for Review",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "449b1747-00a9-419a-8ab2-18bf1dc19af7",
+      "name": "Google Gemini Model for Sentiment",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the sentiment of the following review and respond with ONLY one word: either 'Positive' or 'Negative'.\n\nReview: {{ $json.text }}",
+        "batching": {}
+      },
+      "id": "39513f20-a734-4744-aa17-68ec923a5b20",
+      "name": "Analyze Sentiment",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -16,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8",
+          "mode": "list",
+          "cachedResultName": "SME_AI_System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1435448962,
+          "mode": "list",
+          "cachedResultName": "Reviews",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit#gid=1435448962"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now }}",
+            "Review_Text": "={{ $('Check for Review').item.json.text }}",
+            "Sentiment": "={{ $json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Review_Text",
+              "displayName": "Review_Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "664441bd-9a39-4634-aa0b-f75ad20e32b6",
+      "name": "Save Review to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        336,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.Sentiment }}",
+              "rightValue": "Negative",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ee75a31b-a89b-4e83-802d-1ec2bf7a06b2",
+      "name": "Check if Negative",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/push",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_LINE_CHANNEL_ACCESS_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"to\": \"U07a1270fa4bca172cc32815a675750dd\",\n  \"messages\": [\n    {\n      \"type\": \"text\",\n      \"text\": {{ JSON.stringify(\"🚨 แจ้งเตือนรีวิวเชิงลบ: \" + $('Generate Response').item.json.text) }}\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "42055a85-ca6a-4c61-a37b-5aef2c61d396",
+      "name": "Send LINE Notify Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        800,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_LINE_CHANNEL_ACCESS_TOKEN "
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"replyToken\": \"{{ $('Webhook').item.json.body.events[0].replyToken }}\",\n  \"messages\": [\n    {\n      \"type\": \"text\",\n      \"text\": {{ JSON.stringify($('Generate Response').item.json.text) }}\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "05453bd3-ea60-4e37-a020-c0f5870112a8",
+      "name": "Reply via LINE Messaging API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1136,
+        448
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        320
+      ],
+      "id": "ade84dd6-435a-4d29-bce8-3593bae31873",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8",
+          "mode": "list",
+          "cachedResultName": "SME_AI_System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 165335455,
+          "mode": "list",
+          "cachedResultName": "Sales_Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit#gid=165335455"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.format('dd/MM/yyyy HH:mm') }}",
+            "Customer_Name": "={{ $('Webhook').item.json.body.events[0].source.userId }}",
+            "Interest": "={{ $('Webhook').item.json.body.events[0].message.text }}",
+            "Contact": "={{ $('Webhook').item.json.body.events[0].source.userId }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer_Name",
+              "displayName": "Customer_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest",
+              "displayName": "Interest",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Contact",
+              "displayName": "Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        432
+      ],
+      "id": "4115c0cb-24b3-4b96-bd74-7a284399d341",
+      "name": "Append row in sheet"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Product Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Product Data": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Response",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Response": {
+      "main": [
+        [
+          {
+            "node": "Check for Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Review": {
+      "main": [
+        [
+          {
+            "node": "Analyze Sentiment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Model for Sentiment": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyze Sentiment",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Sentiment": {
+      "main": [
+        [
+          {
+            "node": "Save Review to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Review to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Check if Negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Negative": {
+      "main": [
+        [
+          {
+            "node": "Send LINE Notify Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply via LINE Messaging API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send LINE Notify Alert": {
+      "main": [
+        [
+          {
+            "node": "Reply via LINE Messaging API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Generate Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Reply via LINE Messaging API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "53e23809-6afd-464f-9f1b-fee5a56f901d",
+  "meta": {
+    "instanceId": "1ffafd144748c906d5cfd15a1b539adf9bf800dd1329c086ff1e88506a0bb4d1"
+  },
+  "nodeGroups": [],
+  "id": "ejQcZtLhz6fLSdC1",
+  "tags": []
+}
