@@ -1,118 +1,187 @@
 # 🚀 Automated SME Customer Sentiment Analysis
 
-> **An end-to-end automated AI workflow that helps SMEs analyze customer feedback in real time — from LINE messages to sentiment insights and business dashboards.**
+> **ระบบวิเคราะห์ความรู้สึกของลูกค้าแบบอัตโนมัติสำหรับธุรกิจ SME ตั้งแต่ข้อความจาก LINE ไปจนถึงการวิเคราะห์ด้วย AI และแสดงผลผ่าน Dashboard**
 
 ---
 
-## 📌 Project Overview
+## 📌 ภาพรวมโปรเจกต์
 
-**Automated SME Customer Sentiment Analysis** is an end-to-end automated workflow designed to help **Small and Medium-sized Enterprises (SMEs)** analyze customer feedback in real time.
+**Automated SME Customer Sentiment Analysis** คือระบบ Workflow อัตโนมัติแบบ End-to-End ที่ออกแบบมาเพื่อช่วย **ธุรกิจขนาดกลางและขนาดย่อม (SMEs)** วิเคราะห์ความคิดเห็นและความรู้สึกของลูกค้าจากข้อความที่ได้รับแบบอัตโนมัติ
 
-The project leverages **n8n** to connect **LINE Official Account messages** with **Generative AI / Large Language Models (LLMs)** to automatically classify customer sentiments and extract key insights — without requiring manual data entry.
+โปรเจกต์นี้ใช้ **n8n** เป็นเครื่องมือหลักในการเชื่อมต่อระหว่าง **LINE Official Account (LINE OA)** กับ **Generative AI / Large Language Models (LLMs)** เพื่อวิเคราะห์และจำแนกความรู้สึกของลูกค้า รวมถึงสกัดข้อมูลสำคัญจากข้อความ โดยไม่จำเป็นต้องป้อนข้อมูลหรือจัดประเภทด้วยตนเอง
 
-### 🔄 End-to-End Workflow
+### 🔄 กระบวนการทำงานแบบ End-to-End
 
-**Customer Message → LINE OA → Webhook → n8n → GenAI / LLM → Sentiment Classification → Data Storage → Dashboard → Business Insights**
+**ข้อความจากลูกค้า → LINE OA → Webhook → n8n → GenAI / LLM → วิเคราะห์ความรู้สึก → จัดเก็บข้อมูล → Dashboard → Business Insights**
 
 <img width="1600" height="522" alt="Automated SME Customer Sentiment Analysis Workflow" src="https://github.com/user-attachments/assets/addb4df4-9232-4a2e-bf9f-1e290a7f7703" />
 
 ---
 
-## 🎯 Project Objectives
+## 🎯 วัตถุประสงค์ของโปรเจกต์
 
-- Automate the collection and analysis of customer feedback.
-- Reduce manual data entry and sentiment tagging.
-- Classify customer sentiment using **GenAI / LLM technology**.
-- Transform raw customer messages into structured business data.
-- Provide business owners with faster and more actionable insights.
-- Support real-time identification of negative customer feedback.
+- ทำให้กระบวนการเก็บและวิเคราะห์ความคิดเห็นของลูกค้าเป็นระบบอัตโนมัติ
+- ลดการป้อนข้อมูลและการจัดประเภทความรู้สึกของลูกค้าด้วยตนเอง
+- ใช้ **GenAI / LLM** ในการวิเคราะห์และจำแนกความรู้สึกจากข้อความ
+- แปลงข้อความของลูกค้าที่อยู่ในรูปแบบข้อมูลดิบให้เป็นข้อมูลที่มีโครงสร้าง
+- ช่วยให้เจ้าของธุรกิจสามารถเข้าถึงข้อมูลเชิงธุรกิจได้รวดเร็วขึ้น
+- ช่วยตรวจจับความคิดเห็นเชิงลบหรือปัญหาที่ลูกค้าแสดงความคิดเห็นได้อย่างรวดเร็ว
+- สนับสนุนการนำข้อมูลความคิดเห็นของลูกค้าไปใช้ประกอบการตัดสินใจทางธุรกิจ
 
 ---
 
-## 🛠️ Tech Stack & Tools
+## 🛠️ เทคโนโลยีและเครื่องมือที่ใช้
 
-| Category | Technology / Tool |
+| หมวดหมู่ | เทคโนโลยี / เครื่องมือ |
 |---|---|
-| ⚙️ Workflow Automation | **n8n** — Node-based workflow automation |
-| 🤖 AI & NLP | **GenAI / LLM APIs** — Sentiment classification & insight extraction |
-| 💬 Customer Data Source | **LINE Official Account (LINE OA)** |
-| 🔗 Integration | **Webhooks / LINE OA API** |
-| 📊 Data Storage | **Google Sheets** |
-| 📈 Dashboarding | **Looker Studio / BI Tools** |
+| ⚙️ Workflow Automation | **n8n** — เครื่องมือสำหรับสร้างและจัดการกระบวนการทำงานอัตโนมัติแบบ Node-based |
+| 🤖 AI & NLP | **GenAI / LLM APIs** — ใช้สำหรับวิเคราะห์ความรู้สึกและสกัดข้อมูลสำคัญจากข้อความ |
+| 💬 แหล่งข้อมูลลูกค้า | **LINE Official Account (LINE OA)** |
+| 🔗 การเชื่อมต่อระบบ | **Webhooks / LINE OA API** |
+| 📊 การจัดเก็บข้อมูล | **Google Sheets** |
+| 📈 การแสดงผลข้อมูล | **Looker Studio / BI Tools** |
 
 ---
 
-## 🔄 How It Works
+## 🔄 หลักการทำงานของระบบ
 
-### 1️⃣ Customer Feedback Collection
-Customers send messages through the **LINE Official Account**.
+### 1️⃣ การรับข้อความจากลูกค้า
 
-### 2️⃣ Automated Data Trigger
-The incoming message is received through a **Webhook** and passed into the n8n workflow.
+ลูกค้าส่งข้อความหรือความคิดเห็นผ่าน **LINE Official Account (LINE OA)** ของธุรกิจ
 
-### 3️⃣ AI Sentiment Analysis
-The workflow sends the customer feedback to a **GenAI / LLM API** for automatic sentiment classification and key insight extraction.
+ตัวอย่างเช่น
 
-### 4️⃣ Automated Data Processing
-The workflow processes and structures the AI output without requiring manual data entry or tagging.
-
-### 5️⃣ Data Storage
-The processed results are automatically stored in **Google Sheets** for further analysis and reporting.
-
-### 6️⃣ Business Dashboard
-The data is connected to **Looker Studio / BI Tools**, allowing business owners to monitor customer sentiment and identify important feedback.
+- "บริการดีมากค่ะ พนักงานให้ข้อมูลครบถ้วน"
+- "รอสินค้านานมาก อยากให้ปรับปรุงเรื่องการจัดส่ง"
+- "สินค้าคุณภาพดี แต่ราคาค่อนข้างสูง"
 
 ---
 
-## 💡 Key Highlights & Business Impact
+### 2️⃣ การรับข้อมูลผ่าน Webhook แบบอัตโนมัติ
+
+เมื่อมีข้อความใหม่เข้ามา ระบบจะรับข้อมูลผ่าน **Webhook** และส่งข้อมูลเข้าสู่ Workflow ที่สร้างด้วย **n8n**
+
+กระบวนการนี้ช่วยให้ระบบสามารถรับข้อมูลได้แบบอัตโนมัติ โดยไม่จำเป็นต้องมีเจ้าหน้าที่คัดลอกข้อความของลูกค้าเข้าสู่ระบบด้วยตนเอง
+
+---
+
+### 3️⃣ การวิเคราะห์ความรู้สึกด้วย AI
+
+n8n จะส่งข้อความของลูกค้าไปยัง **GenAI / LLM API** เพื่อวิเคราะห์ข้อมูล
+
+AI สามารถช่วยจำแนกความรู้สึกของข้อความ เช่น
+
+- 😊 **Positive** — ความรู้สึกเชิงบวก
+- 😐 **Neutral** — ความรู้สึกเป็นกลาง
+- 😞 **Negative** — ความรู้สึกเชิงลบ
+
+นอกจากนี้ยังสามารถสกัดข้อมูลสำคัญจากข้อความเพื่อช่วยให้ธุรกิจเข้าใจประเด็นที่ลูกค้ากำลังพูดถึง
+
+---
+
+### 4️⃣ การประมวลผลข้อมูลแบบอัตโนมัติ
+
+หลังจากได้รับผลลัพธ์จาก AI แล้ว ระบบจะนำข้อมูลมาประมวลผลและจัดให้อยู่ในรูปแบบที่มีโครงสร้าง
+
+ตัวอย่างข้อมูลที่สามารถจัดเก็บได้ เช่น
+
+| ข้อมูล | รายละเอียด |
+|---|---|
+| Customer Message | ข้อความต้นฉบับของลูกค้า |
+| Sentiment | Positive / Neutral / Negative |
+| Key Insight | ประเด็นสำคัญจากข้อความ |
+| Timestamp | วันที่และเวลาที่ได้รับข้อความ |
+
+กระบวนการทั้งหมดทำงานผ่าน Workflow อัตโนมัติ โดยไม่จำเป็นต้องจัดประเภทข้อมูลด้วยตนเอง
+
+---
+
+### 5️⃣ การจัดเก็บข้อมูล
+
+ข้อมูลที่ผ่านการประมวลผลจะถูกบันทึกลงใน **Google Sheets** โดยอัตโนมัติ
+
+Google Sheets ทำหน้าที่เป็นพื้นที่จัดเก็บข้อมูลสำหรับนำไปวิเคราะห์ ตรวจสอบ และเชื่อมต่อกับเครื่องมือ Business Intelligence ในขั้นตอนถัดไป
+
+---
+
+### 6️⃣ การสร้าง Business Dashboard
+
+ข้อมูลจาก Google Sheets สามารถนำไปเชื่อมต่อกับ **Looker Studio / BI Tools** เพื่อสร้าง Dashboard สำหรับติดตามความคิดเห็นของลูกค้า
+
+เจ้าของธุรกิจสามารถใช้ Dashboard เพื่อดูข้อมูล เช่น
+
+- จำนวนความคิดเห็นแต่ละประเภท
+- สัดส่วน Positive / Neutral / Negative
+- แนวโน้มความคิดเห็นของลูกค้า
+- ประเด็นหรือปัญหาที่พบจากความคิดเห็น
+- ข้อมูลความคิดเห็นที่ควรติดตามเพิ่มเติม
+
+---
+
+## 💡 จุดเด่นและประโยชน์ของโปรเจกต์
 
 ### ⚡ Zero Manual Intervention
 
-A fully automated end-to-end pipeline that eliminates manual:
+ระบบถูกออกแบบให้ทำงานแบบอัตโนมัติตั้งแต่รับข้อความจนถึงการจัดเก็บข้อมูล ช่วยลดงานที่ต้องดำเนินการด้วยตนเอง เช่น
 
-- Data extraction
-- Sentiment tagging
-- Data logging
-- Initial feedback processing
-
-### 🧪 Real-World Deployment
-
-Successfully **deployed and tested with 6 active SME test users**, providing a practical testing environment beyond a purely theoretical workflow.
-
-### 📊 Actionable Insights
-
-The workflow transforms customer messages into structured sentiment data, enabling business owners to:
-
-- Identify negative feedback quickly.
-- Monitor overall customer sentiment.
-- Review customer feedback trends.
-- Respond to important issues in a more timely manner.
-
-### 🤖 AI-Powered Automation
-
-Combines **Workflow Automation + GenAI / LLM + Customer Data + Business Intelligence** into a single automated pipeline.
+- การดึงข้อมูลจากข้อความ
+- การจัดประเภทความรู้สึก
+- การบันทึกข้อมูล
+- การประมวลผลความคิดเห็นเบื้องต้น
 
 ---
 
-## 📊 Live Dashboards & Data Outputs
+### 🧪 การทดสอบกับผู้ใช้งานจริง
 
-Explore the live outputs generated by the project:
+Workflow ได้ถูก **นำไปใช้งานและทดสอบกับผู้ใช้กลุ่ม SME จำนวน 6 ราย** เพื่อทดสอบการทำงานของระบบในสถานการณ์ที่ใกล้เคียงกับการใช้งานจริง
+
+การทดสอบดังกล่าวช่วยตรวจสอบกระบวนการตั้งแต่การรับข้อความ การวิเคราะห์ด้วย AI ไปจนถึงการจัดเก็บและแสดงผลข้อมูล
+
+---
+
+### 📊 ข้อมูลที่นำไปใช้ต่อได้
+
+ระบบไม่ได้เพียงแค่จำแนกความรู้สึกของลูกค้า แต่ยังเปลี่ยนข้อความที่เป็นข้อมูลดิบให้กลายเป็นข้อมูลที่มีโครงสร้าง ซึ่งสามารถนำไปใช้ในการวิเคราะห์ต่อได้
+
+เจ้าของธุรกิจสามารถใช้ข้อมูลเพื่อ
+
+- ตรวจสอบความคิดเห็นเชิงลบได้รวดเร็วยิ่งขึ้น
+- ติดตามภาพรวมความรู้สึกของลูกค้า
+- วิเคราะห์แนวโน้มความคิดเห็นในช่วงเวลาต่าง ๆ
+- ตรวจสอบปัญหาหรือประเด็นที่ลูกค้าพูดถึง
+- ใช้ข้อมูลประกอบการปรับปรุงบริการและกระบวนการทำงาน
+
+---
+
+### 🤖 AI-Powered Automation
+
+โปรเจกต์นี้เป็นการผสานเทคโนโลยีหลายส่วนเข้าด้วยกัน ได้แก่
+
+**Workflow Automation + GenAI / LLM + Customer Data + Business Intelligence**
+
+ทำให้สามารถสร้างกระบวนการตั้งแต่การรับข้อมูล การวิเคราะห์ การจัดเก็บ ไปจนถึงการแสดงผลข้อมูลในรูปแบบ Dashboard ได้ภายใน Workflow เดียว
+
+---
+
+## 📊 Live Dashboard & Data Output
+
+สามารถดูผลลัพธ์จากระบบที่สร้างขึ้นได้จากลิงก์ด้านล่าง
 
 ### 📈 Looker Studio — Live Dashboard
 
 [![Looker Studio](https://img.shields.io/badge/Looker_Studio-Live_Dashboard-blue?style=for-the-badge&logo=googlecloud&logoColor=white)](https://datastudio.google.com/s/lmC0nS_JDuM)
 
-> Interactive dashboard for exploring customer sentiment analysis results and business insights.
+> Dashboard สำหรับแสดงผลการวิเคราะห์ความรู้สึกของลูกค้าและข้อมูลเชิงธุรกิจที่สร้างจาก Workflow อัตโนมัติ
 
 ### 📋 Google Sheets — Database View
 
 [![Google Sheets](https://img.shields.io/badge/Google_Sheets-Database_View-green?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1XqixdYgmsd9SPp59CxfjZl82ogS9keV7bbKVPh8ZVj8/edit?usp=sharing)
 
-> Structured data output generated by the automated workflow.
+> ตารางข้อมูลที่จัดเก็บผลลัพธ์จาก Workflow อัตโนมัติ ซึ่งสามารถนำไปใช้สำหรับตรวจสอบ วิเคราะห์ และสร้าง Dashboard ได้
 
 ---
 
-## 📂 Repository Contents
+## 📂 โครงสร้าง Repository
 
 ```text
 📦 Automated-SME-Customer-Sentiment-Analysis
