@@ -12,7 +12,7 @@
 
 ### 🔄 กระบวนการทำงานแบบ End-to-End
 
-**ข้อความจากลูกค้า → LINE OA → Webhook → n8n → GenAI / LLM → วิเคราะห์ความรู้สึก → จัดเก็บข้อมูล → Dashboard → Business Insights**
+**Customer Message → LINE OA → Webhook → n8n → GenAI / LLM → Sentiment Classification → Data Storage → Dashboard → Business Insights**
 
 <img width="1600" height="522" alt="Automated SME Customer Sentiment Analysis Workflow" src="https://github.com/user-attachments/assets/addb4df4-9232-4a2e-bf9f-1e290a7f7703" />
 
